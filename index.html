@@ -7,14 +7,13 @@
     <style>
         body { 
             margin: 0; 
-            padding: 0; 
+            padding: 40px 20px; 
             font-family: Arial, sans-serif; 
             box-sizing: border-box;
             background: url("bj.jpg") no-repeat center center fixed;
             background-size: cover; 
             min-height: 100vh; 
             position: relative; 
-            overflow: hidden;
         }
         .logo-wrap {
             position: absolute;
@@ -30,16 +29,18 @@
             height: auto;
             display: block;
         }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
         .content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             z-index: 5; 
             background-color: rgba(255, 255, 255, 0.85);
             border-radius: 20px;
             padding: 30px 20px;
-            width: 85%;
             text-align: center;
             backdrop-filter: blur(5px);
         }
@@ -80,16 +81,29 @@
     <div class="logo-wrap">
         <img src="logo.png" alt="logo" class="logo">
     </div>
-    <div class="content">
-        <h1>U3D绘制模板IMGUI</h1>
-        <p>选择需要的模板版本进行下载</p>
-        <div class="btn-group">
-            <a href="https://wwrr.lanzoul.com/iTFSG32pxydg" target="_blank">
-                <button class="download-btn">基础版</button>
-            </a>
-            <a href="https://wwrr.lanzoul.com/iLLJQ39y1rfa" target="_blank">
-                <button class="download-btn">美化版</button>
-            </a>
+    <div class="container">
+        <!-- 原有板块 -->
+        <div class="content">
+            <h1>绘制模板IMGUI</h1>
+            <p>选择需要的模板版本进行下载</p>
+            <div class="btn-group">
+                <a href="https://wwrr.lanzoul.com/iTFSG32pxydg" target="_blank">
+                    <button class="download-btn">基础版</button>
+                </a>
+                <a href="https://wwrr.lanzoul.com/iLLJQ39y1rfa" target="_blank">
+                    <button class="download-btn">美化版</button>
+                </a>
+            </div>
+        </div>
+        <!-- 新增绘制模板LGL板块（已更新正确链接） -->
+        <div class="content">
+            <h1>绘制模板LGL</h1>
+            <p>选择需要的模板版本进行下载</p>
+            <div class="btn-group">
+                <a href="https://wwrr.lanzoul.com/iWx5Z32pxy6j" target="_blank">
+                    <button class="download-btn">基础版</button>
+                </a>
+            </div>
         </div>
     </div>
 </body>
