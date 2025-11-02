@@ -7,33 +7,46 @@
     <style>
         body { 
             margin: 0; 
-            padding: 20px; /* 缩小内边距，避免内容溢出 */
-            background: #f5f5f5; 
+            padding: 20px; 
             font-family: Arial, sans-serif; 
             box-sizing: border-box;
+            background: url("bj.jpg") no-repeat center center fixed;
+            background-size: cover; 
+            min-height: 100vh; 
+            position: relative; 
         }
-        /* 头像定位到左上角 */
         .logo { 
-            width: 80px; /* 适当缩小头像，适配手机显示 */
+            width: 80px; 
             height: 80px; 
-            border-radius: 0; /* 取消圆形，保持原图样式 */
+            border-radius: 0; 
             position: absolute;
             top: 20px;
             left: 20px;
+            z-index: 10; 
         }
-        /* 内容区避开头像 */
+        /* 新增遮罩层，提升文字可读性 */
         .content {
-            margin-top: 30px; /* 给头像留出空间 */
+            margin-top: 30px; 
             text-align: center;
-            padding-top: 60px; /* 避免标题被头像遮挡 */
+            padding: 40px 20px;
+            position: relative;
+            z-index: 5; 
+            /* 半透明白色背景作为遮罩 */
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 12px; /* 增加圆角更美观 */
+            max-width: 600px; /* 限制内容宽度，避免过宽 */
+            margin-left: auto;
+            margin-right: auto;
         }
         h1 {
-            font-size: 24px; /* 适配手机的标题大小 */
+            font-size: 24px; 
             margin: 10px 0;
+            color: #222;
         }
         p {
             font-size: 16px;
-            color: #666;
+            color: #444;
+            margin-bottom: 20px;
         }
         .download-btn { 
             padding: 14px 28px; 
@@ -44,15 +57,12 @@
             border-radius: 8px; 
             cursor: pointer; 
             transition: background 0.3s;
-            margin-top: 20px;
         }
         .download-btn:hover { background: #34495e; }
     </style>
 </head>
 <body>
-    <!-- 头像放在左上角 -->
     <img src="logo.png" alt="logo" class="logo">
-    <!-- 内容区居中显示 -->
     <div class="content">
         <h1>U3D逆向绘制模板</h1>
         <p>点击下方按钮获取完整模板文件</p>
