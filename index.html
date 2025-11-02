@@ -7,16 +7,18 @@
     <style>
         body { 
             margin: 0; 
-            padding: 40px 20px; 
+            padding: 80px 20px 20px; /* 顶部留出LOGO空间 */
             font-family: Arial, sans-serif; 
             box-sizing: border-box;
             background: url("bj.jpg") no-repeat center center fixed;
             background-size: cover; 
             min-height: 100vh; 
             position: relative; 
+            overflow-y: auto; /* 开启垂直滚动 */
         }
+        /* LOGO固定在左上角，不随滚动移动 */
         .logo-wrap {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 20px;
             z-index: 10;
@@ -34,7 +36,7 @@
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 25px; /* 缩小板块间距，适配滑动 */
         }
         .content {
             z-index: 5; 
@@ -78,11 +80,12 @@
     </style>
 </head>
 <body>
+    <!-- LOGO固定在左上角，不随页面滚动 -->
     <div class="logo-wrap">
         <img src="logo.png" alt="logo" class="logo">
     </div>
+    <!-- 内容容器可上下滑动 -->
     <div class="container">
-        <!-- 原有板块 -->
         <div class="content">
             <h1>绘制模板IMGUI</h1>
             <p>选择需要的模板版本进行下载</p>
@@ -95,7 +98,6 @@
                 </a>
             </div>
         </div>
-        <!-- 新增绘制模板LGL板块（已更新正确链接） -->
         <div class="content">
             <h1>绘制模板LGL</h1>
             <p>选择需要的模板版本进行下载</p>
