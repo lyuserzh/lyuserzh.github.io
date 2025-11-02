@@ -16,7 +16,6 @@
             position: relative; 
             overflow: hidden;
         }
-        /* 左上角logo（带半透明遮罩） */
         .logo-wrap {
             position: absolute;
             top: 20px;
@@ -31,7 +30,6 @@
             height: auto;
             display: block;
         }
-        /* 内容区（带半透明遮罩，确保文字清晰） */
         .content {
             position: absolute;
             top: 50%;
@@ -55,7 +53,6 @@
             color: #555;
             margin-bottom: 20px;
         }
-        /* 按钮组：纵向排列，增加间距区分 */
         .btn-group {
             display: flex;
             flex-direction: column;
@@ -80,22 +77,18 @@
     </style>
 </head>
 <body>
-    <!-- 左上角带遮罩的logo -->
     <div class="logo-wrap">
         <img src="logo.png" alt="logo" class="logo">
     </div>
-    <!-- 内容区：包含两个下载按钮 -->
     <div class="content">
         <h1>U3D逆向绘制模板</h1>
         <p>选择需要的模板版本进行下载</p>
         <div class="btn-group">
-            <!-- 原有基础版模板 -->
             <a href="https://wwrr.lanzoul.com/iTFSG32pxydg" target="_blank">
-                <button class="download-btn">立即下载基础版模板</button>
+                <button class="download-btn">基础版模板</button>
             </a>
-            <!-- 新增美化版模板 -->
             <a href="https://wwrr.lanzoul.com/iLLJQ39y1rfa" target="_blank">
-                <button class="download-btn">立即下载绘制模板美化版</button>
+                <button class="download-btn">绘制模板美化版</button>
             </a>
         </div>
     </div>
