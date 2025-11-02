@@ -5,27 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>U3D逆向绘制模板下载</title>
     <style>
-        body { margin: 0; padding: 50px; background: #f5f5f5; text-align: center; font-family: Arial, sans-serif; }
-        .logo { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; }
+        body { 
+            margin: 0; 
+            padding: 20px; /* 缩小内边距，避免内容溢出 */
+            background: #f5f5f5; 
+            font-family: Arial, sans-serif; 
+            box-sizing: border-box;
+        }
+        /* 头像定位到左上角 */
+        .logo { 
+            width: 80px; /* 适当缩小头像，适配手机显示 */
+            height: 80px; 
+            border-radius: 0; /* 取消圆形，保持原图样式 */
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        /* 内容区避开头像 */
+        .content {
+            margin-top: 30px; /* 给头像留出空间 */
+            text-align: center;
+            padding-top: 60px; /* 避免标题被头像遮挡 */
+        }
+        h1 {
+            font-size: 24px; /* 适配手机的标题大小 */
+            margin: 10px 0;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+        }
         .download-btn { 
-            padding: 16px 32px; 
-            font-size: 18px; 
+            padding: 14px 28px; 
+            font-size: 16px; 
             background: #2c3e50; 
             color: white; 
             border: none; 
             border-radius: 8px; 
             cursor: pointer; 
-            transition: background 0.3s; 
+            transition: background 0.3s;
+            margin-top: 20px;
         }
         .download-btn:hover { background: #34495e; }
     </style>
 </head>
 <body>
+    <!-- 头像放在左上角 -->
     <img src="logo.png" alt="logo" class="logo">
-    <h1>U3D逆向绘制模板</h1>
-    <p>点击下方按钮获取完整模板文件</p>
-    <a href="https://wwrr.lanzoul.com/iTFSG32pxydg" target="_blank">
-        <button class="download-btn">立即下载模板</button>
-    </a>
+    <!-- 内容区居中显示 -->
+    <div class="content">
+        <h1>U3D逆向绘制模板</h1>
+        <p>点击下方按钮获取完整模板文件</p>
+        <a href="https://wwrr.lanzoul.com/iTFSG32pxydg" target="_blank">
+            <button class="download-btn">立即下载模板</button>
+        </a>
+    </div>
 </body>
 </html>
