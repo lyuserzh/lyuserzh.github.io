@@ -38,14 +38,17 @@
         width: 100%;
         margin-bottom: 20px;
     } 
-    /* 学科行绿色竖线 */
+    /* 学科行样式（大幅放大文字+绿色竖线） */
     .subject-header {
         position: relative;
         background: #f0f0f0; 
     }
     .subject-header .subject-text {
         position: relative;
-        padding-left: 8px; 
+        padding-left: 16px; /* 适配加宽竖线 */
+        font-size: 24px; /* 大幅放大文字 */
+        line-height: 2.2; /* 调整行高，确保垂直居中 */
+        font-weight: 500;
     }
     .subject-header .subject-text::before {
         content: '';
@@ -53,21 +56,21 @@
         left: 0;
         top: 0;
         bottom: 0;
-        width: 4px;
-        background: #00b358; 
+        width: 8px; /* 竖线宽度大幅加宽 */
+        background: #00b358; /* 竖线颜色不变 */
     }
     /* 组别行样式 */
     .group-title {
         color: rebeccapurple; 
         background: #f8f8f8; 
     }
-    /* 学科名样式 */
+    /* 学科名样式（同步大幅放大） */
     .subject-name {
         color: blue;
         font-weight: bold;
-        font-size: 16px;
+        font-size: 28px; /* 学科名大幅放大 */
+        margin-left: 8px;
     }
-
     /* 美化核心样式（对齐参考页面） */
     * {
         margin: 0;
@@ -82,7 +85,6 @@
     *:focus {
         outline: none !important;
     }
-
     /* 自定义区域整体美化 */
     .edit-panel {
         margin: 15px 0;
@@ -100,7 +102,6 @@
         from { opacity: 0; transform: translateY(30px); }
         to { opacity: 1; transform: translateY(0); }
     }
-
     /* 标题美化 */
     .edit-panel .layui-elem-field-title legend {
         font-size: 20px;
@@ -109,7 +110,6 @@
         padding: 0 15px;
         font-weight: normal;
     }
-
     /* 表单项美化 */
     .edit-item {
         margin-bottom: 15px;
@@ -141,7 +141,6 @@
         min-height: 80px;
         resize: vertical;
     }
-
     /* 学科模块美化 */
     .subject-edit-module {
         margin-bottom: 25px;
@@ -153,7 +152,6 @@
     .subject-edit-module:nth-child(2) { animation-delay: 0.3s; }
     .subject-edit-module:nth-child(3) { animation-delay: 0.5s; }
     .subject-edit-module:nth-child(4) { animation-delay: 0.7s; }
-
     .subject-edit-title {
         font-size: 16px;
         color: #2c3e50;
@@ -162,7 +160,6 @@
         padding-left: 10px;
         border-left: 3px solid #00b358;
     }
-
     /* 按钮美化（文字居中） */
     #addSubjectBtn {
         background: #2c3e50;
@@ -182,7 +179,6 @@
     #addSubjectBtn:hover {
         background: #34495e;
     }
-
     .layui-btn-danger {
         background: #e74c3c !important;
         border: none !important;
@@ -198,7 +194,6 @@
     .layui-btn-danger:hover {
         background: #c0392b !important;
     }
-
     .edit-panel .layui-btn:last-child {
         background: #2c3e50;
         color: white;
@@ -217,7 +212,6 @@
     .edit-panel .layui-btn:last-child:hover {
         background: #34495e;
     }
-
     /* 按钮组布局 */
     .btn-group {
         display: flex;
@@ -225,7 +219,6 @@
         justify-content: center;
         margin-top: 5px;
     }
-
     /* 右下角提示框样式（统一风格） */
     .toast-notify {
         position: fixed;
@@ -251,7 +244,6 @@
 <body class="site-home" id="LAY_home" style="background-color: #eee;"> 
     <!-- 右下角提示框 -->
     <div class="toast-notify" id="toastNotify"></div>
-
     <div class="layui-header header header-index"> 
         <div class="layui-main"> 
             <a class="logo" onclick="return false;" href="javascript:void(0)" id="logolink"> 
@@ -284,7 +276,6 @@
         <div id="dayhomework"></div> 
         <div id="homework"></div> 
         <div id="comment"></div> 
-
         <!-- 多学科自定义编辑区域 -->
         <div class="edit-panel" id="customPanel">
             <fieldset class="layui-elem-field layui-field-title" style="margin-top:0;">
@@ -307,7 +298,6 @@
             <div style="text-align:center; margin:10px 0 20px;">
                 <button class="layui-btn" id="addSubjectBtn" onclick="addSubjectModule()">+ 添加学科</button>
             </div>
-
             <!-- 学科1：数学（默认） -->
             <div class="subject-edit-module" data-subject="1">
                 <div class="subject-edit-title">学科1：数学</div>
@@ -351,7 +341,6 @@
                     <button class="layui-btn layui-btn-danger" onclick="removeSubjectModule(this)">删除学科</button>
                 </div>
             </div>
-
             <!-- 生成作业按钮 -->
             <div style="text-align:center; margin-top:15px;">
                 <button class="layui-btn" onclick="generateMultiSubjectHomework()">生成作业</button>
@@ -363,18 +352,16 @@
             <p id="SchoolName2">荣成市蜊江中学</p> 
         </div> 
     </div>
-    <div class="site-tree-mobile layui-hide"> <<<<<<<<<<<<<<<<<<<i class="layui-icon">&#xe602;</</</</</</</</</</</</</</</</</</i> </div> 
+    <div class="site-tree-mobile layui-hide"> <<<<<<<<<<<<<<<<<<<<<<i class="layui-icon">&#xe602;</</</</</</</</</</</</</</</</</</</</</i> </div> 
     <div class="site-mobile-shade"></div>
     <script> 
         laydate({ 
             elem: '#startDate' 
         }); 
         laydate.skin("dahong"); 
-
         // 学科模块计数器
         let subjectModuleCount = 1;
         const toastNotify = document.getElementById("toastNotify");
-
         // 显示右下角提示（统一样式，默认显示0.5秒）
         function showToast(message, duration = 500) {
             toastNotify.textContent = message;
@@ -383,7 +370,6 @@
                 toastNotify.classList.remove("show");
             }, duration);
         }
-
         // 添加学科编辑模块（新增成功提示）
         function addSubjectModule() {
             subjectModuleCount++;
@@ -444,7 +430,6 @@
             // 添加学科成功提示（与保留学科提示样式一致）
             showToast(`添加${defaultSubject}成功`);
         }
-
         // 删除学科编辑模块（移除震动，保留提示）
         function removeSubjectModule(btn) {
             const modules = document.querySelectorAll(".subject-edit-module");
@@ -470,7 +455,6 @@
             // 删除学科成功提示
             showToast(`删除${subjectName}成功`);
         }
-
         // 生成多学科作业（保留成功提示）
         function generateMultiSubjectHomework() {
             const school = $("#edit_school").val();
@@ -480,7 +464,6 @@
                 <div class="headtext">${date}${grade}日常作业</div>
                 <div class="headtext2">审批领导：年级主任</div>
             `;
-
             // 遍历所有学科模块
             const subjectModules = document.querySelectorAll(".subject-edit-module");
             subjectModules.forEach(module => {
@@ -493,7 +476,6 @@
                 const cContent = module.querySelector(".edit_c_content").value;
                 const remark = module.querySelector(".edit_remark").value;
                 const teacher = module.querySelector(".edit_teacher").value;
-
                 homeworkHtml += `
                     <table>
                         <tr class="subject-header">
@@ -534,22 +516,18 @@
                     </table>
                 `;
             });
-
             // 更新页面内容
             $("#SchoolName").text(school);
             $("#SchoolName2").text(school);
             $("#startDate").val(date);
             $("#homework").html(homeworkHtml);
-
             // 生成作业成功提示
             showToast("作业生成成功");
         }
-
         // 查询按钮同步调用
         $("#btnQuery").on("click", function () { 
             generateMultiSubjectHomework();
         });
-
         // 年级导航链接
         $("#grade1").on("click", function () { 
             location.href = "http://a.rcjy.com.cn:8000/zuoye/ChuZhong1.html?schoolid=36985645993"; 
@@ -566,13 +544,11 @@
         $("#logolink").on("click", function () { 
             location.href = "http://a.rcjy.com.cn:8000/zuoye/BSZuoyeList.aspx?schoolid=" + GetQueryString("schoolid"); 
         });
-
         // 页面初始化
         $(function () { 
             InitializeSchoolData(); 
             InitializeDGSInfo(); 
         });
-
         function InitializeSchoolData() { 
             var schoolid = GetQueryString("schoolid"); 
             $.ajax("http://a.rcjy.com.cn:8000/AjaxServices/ZuoyeHandle.ashx", { 
@@ -593,14 +569,12 @@
                 } 
             }); 
         }
-
         function GetQueryString(name) { 
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); 
             var r = window.location.search.substr(1).match(reg); 
             if (r != null) return unescape(r[2]); 
             return null; 
         }
-
         function InitializeDGSInfo() { 
             $("#homework").html("<p style='text-align:center; padding:20px;'>请填写学科作业内容并点击「生成作业」</p>"); 
         }
