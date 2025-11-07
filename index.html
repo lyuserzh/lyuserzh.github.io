@@ -163,7 +163,7 @@
         border-left: 3px solid #00b358;
     }
 
-    /* 按钮美化（核心优化：文字绝对居中） */
+    /* 按钮美化（文字居中） */
     #addSubjectBtn {
         background: #2c3e50;
         color: white;
@@ -174,7 +174,6 @@
         cursor: pointer;
         transition: background 0.3s;
         margin-bottom: 20px;
-        /* 文字居中关键属性 */
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -191,7 +190,6 @@
         padding: 10px 20px !important;
         font-size: 14px !important;
         transition: background 0.3s !important;
-        /* 文字居中关键属性 */
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -211,7 +209,6 @@
         cursor: pointer;
         transition: background 0.3s;
         margin-top: 10px;
-        /* 文字居中关键属性 */
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -229,26 +226,32 @@
         margin-top: 5px;
     }
 
-    /* 震动动画（参考页面效果） */
-    @keyframes shake {
-        0% { transform: translate(0, 0); }
-        10% { transform: translate(-4px, -3px); }
-        20% { transform: translate(3px, 4px); }
-        30% { transform: translate(4px, -4px); }
-        40% { transform: translate(-3px, 3px); }
-        50% { transform: translate(-4px, 4px); }
-        60% { transform: translate(3px, -3px); }
-        70% { transform: translate(4px, 3px); }
-        80% { transform: translate(-3px, -4px); }
-        90% { transform: translate(2px, 2px); }
-        100% { transform: translate(0, 0); }
+    /* 右下角提示框样式（统一风格） */
+    .toast-notify {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        z-index: 9999;
+        opacity: 0;
+        transform: translateX(100%) scale(0.8);
+        transition: all 0.3s ease-out;
+        pointer-events: none;
     }
-    .shake-animation {
-        animation: shake 0.5s ease-in-out;
+    .toast-notify.show {
+        opacity: 1;
+        transform: translateX(0) scale(1);
     }
 </style>
 </head>
 <body class="site-home" id="LAY_home" style="background-color: #eee;"> 
+    <!-- 右下角提示框 -->
+    <div class="toast-notify" id="toastNotify"></div>
+
     <div class="layui-header header header-index"> 
         <div class="layui-main"> 
             <a class="logo" onclick="return false;" href="javascript:void(0)" id="logolink"> 
@@ -282,7 +285,7 @@
         <div id="homework"></div> 
         <div id="comment"></div> 
 
-        <!-- 多学科自定义编辑区域（美化后） -->
+        <!-- 多学科自定义编辑区域 -->
         <div class="edit-panel" id="customPanel">
             <fieldset class="layui-elem-field layui-field-title" style="margin-top:0;">
                 <legend>作业自定义</legend>
@@ -360,7 +363,7 @@
             <p id="SchoolName2">荣成市蜊江中学</p> 
         </div> 
     </div>
-    <div class="site-tree-mobile layui-hide"> <<<<<<<<<<<<<<i class="layui-icon">&#xe602;</</</</</</</</</</</</</i> </div> 
+    <div class="site-tree-mobile layui-hide"> <<<<<<<<<<<<<<<<<<<i class="layui-icon">&#xe602;</</</</</</</</</</</</</</</</</</i> </div> 
     <div class="site-mobile-shade"></div>
     <script> 
         laydate({ 
@@ -370,8 +373,18 @@
 
         // 学科模块计数器
         let subjectModuleCount = 1;
+        const toastNotify = document.getElementById("toastNotify");
 
-        // 添加学科编辑模块
+        // 显示右下角提示（统一样式，默认显示0.5秒）
+        function showToast(message, duration = 500) {
+            toastNotify.textContent = message;
+            toastNotify.classList.add("show");
+            setTimeout(() => {
+                toastNotify.classList.remove("show");
+            }, duration);
+        }
+
+        // 添加学科编辑模块（新增成功提示）
         function addSubjectModule() {
             subjectModuleCount++;
             const defaultSubjects = ["物理", "语文", "英语", "化学"];
@@ -427,34 +440,38 @@
             // 为新模块添加动画延迟
             const modules = document.querySelectorAll(".subject-edit-module");
             modules[modules.length - 1].style.animationDelay = `${0.3 * modules.length}s`;
+            
+            // 添加学科成功提示（与保留学科提示样式一致）
+            showToast(`添加${defaultSubject}成功`);
         }
 
-        // 删除学科编辑模块
+        // 删除学科编辑模块（移除震动，保留提示）
         function removeSubjectModule(btn) {
             const modules = document.querySelectorAll(".subject-edit-module");
             if (modules.length <= 1) {
-                alert("至少保留一个学科模块");
-                // 添加震动反馈
-                const panel = document.getElementById("customPanel");
-                panel.classList.add("shake-animation");
-                setTimeout(() => panel.classList.remove("shake-animation"), 500);
+                // 显示“至少保留一个学科模块”提示
+                showToast("至少保留一个学科模块");
                 return;
             }
             const module = btn.closest(".subject-edit-module");
+            const subjectName = module.querySelector(".edit_subject_name").value;
             module.remove();
             
             // 重新编号学科标题
             document.querySelectorAll(".subject-edit-module").forEach((mod, index) => {
                 const titleElem = mod.querySelector(".subject-edit-title");
-                const subjectName = mod.querySelector(".edit_subject_name").value;
-                titleElem.textContent = `学科${index + 1}：${subjectName}`;
+                const name = mod.querySelector(".edit_subject_name").value;
+                titleElem.textContent = `学科${index + 1}：${name}`;
                 mod.setAttribute("data-subject", index + 1);
                 mod.style.animationDelay = `${0.3 * (index + 1)}s`;
             });
             subjectModuleCount = modules.length - 1;
+            
+            // 删除学科成功提示
+            showToast(`删除${subjectName}成功`);
         }
 
-        // 生成多学科作业
+        // 生成多学科作业（保留成功提示）
         function generateMultiSubjectHomework() {
             const school = $("#edit_school").val();
             const date = $("#edit_date").val();
@@ -524,10 +541,8 @@
             $("#startDate").val(date);
             $("#homework").html(homeworkHtml);
 
-            // 生成成功震动反馈
-            const panel = document.getElementById("customPanel");
-            panel.classList.add("shake-animation");
-            setTimeout(() => panel.classList.remove("shake-animation"), 500);
+            // 生成作业成功提示
+            showToast("作业生成成功");
         }
 
         // 查询按钮同步调用
