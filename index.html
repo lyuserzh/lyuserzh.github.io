@@ -1,159 +1,593 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>作业公示平台</title>
-    <meta name="keywords" content="作业公示平台">
-    <meta name="description" content="作业公示平台">
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <link href="http://a.rcjy.com.cn:8000/WebScript/layui2/css/layui.css" rel="stylesheet" />
-    <link href="http://a.rcjy.com.cn:8000/WebScript/layui2/global.css" rel="stylesheet" />
-    <script src="http://a.rcjy.com.cn:8000/ClientScript/jquery/jquery.min.js" type="text/javascript"></script>
+<head> 
+    <meta charset="utf-8"> 
+    <title>作业公示平台</title> 
+    <meta name="keywords" content="作业公示平台"> 
+    <meta name="description" content="作业公示平台"> 
+    <meta name="renderer" content="webkit"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> 
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+    <meta name="apple-mobile-web-app-capable" content="yes"> 
+    <meta name="format-detection" content="telephone=no"> 
+    <link href="http://a.rcjy.com.cn:8000/WebScript/layui2/css/layui.css" rel="stylesheet" /> 
+    <link href="http://a.rcjy.com.cn:8000/WebScript/layui2/global.css" rel="stylesheet" /> 
+    <script src="http://a.rcjy.com.cn:8000/ClientScript/jquery/jquery.min.js" type="text/javascript"></script> 
     <script src="http://a.rcjy.com.cn:8000/ClientScript/laydate/laydate.js" type="text/javascript"></script>
+<style> 
+    /* 基础样式保留 */
+    .headtext { 
+        font-size: 20px; 
+        padding: 2px; 
+        color: rebeccapurple; 
+    } 
+    .headtext2 { 
+        font-size: 18px; 
+        padding: 2px; 
+        color: darkred; 
+    } 
+    td { 
+        padding: 5px; 
+        font-size: 12pt;
+        border: 1px solid #ccc; 
+    } 
+    table { 
+        margin-top: 5px;
+        border-collapse: collapse; 
+        width: 100%;
+        margin-bottom: 20px;
+    } 
+    /* 学科行绿色竖线 */
+    .subject-header {
+        position: relative;
+        background: #f0f0f0; 
+    }
+    .subject-header .subject-text {
+        position: relative;
+        padding-left: 8px; 
+    }
+    .subject-header .subject-text::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #00b358; 
+    }
+    /* 组别行样式 */
+    .group-title {
+        color: rebeccapurple; 
+        background: #f8f8f8; 
+    }
+    /* 学科名样式 */
+    .subject-name {
+        color: blue;
+        font-weight: bold;
+        font-size: 16px;
+    }
 
-    <style>
-        .headtext {
-            font-size: 20px;
-            padding: 2px;
-            color: rebeccapurple;
-        }
-        .headtext2 {
-            font-size: 18px;
-            padding: 2px;
-            color: darkred;
-        }
-        td {
-            padding: 3px;
-            font-size: 12pt;
-        }
-        table {
-            margin-top: 5px;
-        }
-    </style>
+    /* 美化核心样式（对齐参考页面） */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    *:focus {
+        outline: none !important;
+    }
+
+    /* 自定义区域整体美化 */
+    .edit-panel {
+        margin: 15px 0;
+        padding: 25px 20px;
+        background-color: rgba(255, 255, 255, 0.6);
+        border: none;
+        border-radius: 15px;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        opacity: 0;
+        transform: translateY(30px);
+        animation: floatUp 0.6s ease-out forwards;
+    }
+    @keyframes floatUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 标题美化 */
+    .edit-panel .layui-elem-field-title legend {
+        font-size: 20px;
+        color: #222;
+        margin: 10px 0 20px;
+        padding: 0 15px;
+        font-weight: normal;
+    }
+
+    /* 表单项美化 */
+    .edit-item {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .edit-item label {
+        width: 120px;
+        text-align: right;
+        padding-top: 8px;
+        color: #555;
+        font-size: 14px;
+    }
+    .edit-item input, .edit-item textarea {
+        flex: 1;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #333;
+        background: rgba(255, 255, 255, 0.9);
+        transition: border-color 0.3s;
+    }
+    .edit-item input:focus, .edit-item textarea:focus {
+        border-color: #2c3e50;
+    }
+    .edit-item textarea {
+        min-height: 80px;
+        resize: vertical;
+    }
+
+    /* 学科模块美化 */
+    .subject-edit-module {
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 1px dashed #eee;
+        animation: floatUp 0.6s ease-out forwards;
+        opacity: 0;
+    }
+    .subject-edit-module:nth-child(2) { animation-delay: 0.3s; }
+    .subject-edit-module:nth-child(3) { animation-delay: 0.5s; }
+    .subject-edit-module:nth-child(4) { animation-delay: 0.7s; }
+
+    .subject-edit-title {
+        font-size: 16px;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-weight: bold;
+        padding-left: 10px;
+        border-left: 3px solid #00b358;
+    }
+
+    /* 按钮美化（核心优化：文字绝对居中） */
+    #addSubjectBtn {
+        background: #2c3e50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+        margin-bottom: 20px;
+        /* 文字居中关键属性 */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
+    #addSubjectBtn:hover {
+        background: #34495e;
+    }
+
+    .layui-btn-danger {
+        background: #e74c3c !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 10px 20px !important;
+        font-size: 14px !important;
+        transition: background 0.3s !important;
+        /* 文字居中关键属性 */
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1 !important;
+    }
+    .layui-btn-danger:hover {
+        background: #c0392b !important;
+    }
+
+    .edit-panel .layui-btn:last-child {
+        background: #2c3e50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 30px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+        margin-top: 10px;
+        /* 文字居中关键属性 */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
+    .edit-panel .layui-btn:last-child:hover {
+        background: #34495e;
+    }
+
+    /* 按钮组布局 */
+    .btn-group {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 5px;
+    }
+
+    /* 震动动画（参考页面效果） */
+    @keyframes shake {
+        0% { transform: translate(0, 0); }
+        10% { transform: translate(-4px, -3px); }
+        20% { transform: translate(3px, 4px); }
+        30% { transform: translate(4px, -4px); }
+        40% { transform: translate(-3px, 3px); }
+        50% { transform: translate(-4px, 4px); }
+        60% { transform: translate(3px, -3px); }
+        70% { transform: translate(4px, 3px); }
+        80% { transform: translate(-3px, -4px); }
+        90% { transform: translate(2px, 2px); }
+        100% { transform: translate(0, 0); }
+    }
+    .shake-animation {
+        animation: shake 0.5s ease-in-out;
+    }
+</style>
 </head>
-<body class="site-home" id="LAY_home" style="background-color: #eee;">
-    <div class="layui-header header header-index">
-        <div class="layui-main">
-            <a class="logo" onclick="return false;" href="javascript:void(0)" id="logolink">
-                <img src="http://a.rcjy.com.cn:8000/zuoye/image/logo.png" />
-            </a>
-            <div class="layui-form component"></div>
-            <ul class="layui-nav">
-                <li class="layui-nav-item ">
-                    <a onclick="return false;" href="javascript:void(0)" id="grade1">初一</a>
-                </li>
-                <li class="layui-nav-item ">
-                    <a onclick="return false;" href="javascript:void(0)" id="grade2">初二</a>
-                </li>
-                <li class="layui-nav-item ">
-                    <a onclick="return false;" href="javascript:void(0)" id="grade3">初三</a>
-                </li>
-                <li class="layui-nav-item ">
-                    <a onclick="return false;" href="javascript:void(0)" id="grade4">初四</a>
-                </li>
-            </ul>
+<body class="site-home" id="LAY_home" style="background-color: #eee;"> 
+    <div class="layui-header header header-index"> 
+        <div class="layui-main"> 
+            <a class="logo" onclick="return false;" href="javascript:void(0)" id="logolink"> 
+                <img src="http://a.rcjy.com.cn:8000/zuoye/image/logo.png" /> 
+            </a> 
+            <div class="layui-form component"></div> 
+            <ul class="layui-nav"> 
+                <li class="layui-nav-item "> 
+                    <a onclick="return false;" href="javascript:void(0)" id="grade1">初一</a> 
+                </li> 
+                <li class="layui-nav-item "> 
+                    <a onclick="return false;" href="javascript:void(0)" id="grade2">初二</a> 
+                </li> 
+                <li class="layui-nav-item "> 
+                    <a onclick="return false;" href="javascript:void(0)" id="grade3">初三</a> 
+                </li> 
+                <li class="layui-nav-item "> 
+                    <a onclick="return false;" href="javascript:void(0)" id="grade4">初四</a> 
+                </li> 
+            </ul> 
+        </div> 
+    </div>
+    <div class="layui-main"> 
+        <fieldset class="layui-elem-field layui-field-title"> 
+            <legend><div id="SchoolName">荣成市蜊江中学</div></legend> 
+        </fieldset> 
+        <div style="width:80%; padding:5px;"> 
+            <input id="startDate" class="laydate-icon"><button class="layui-btn layui-btn-mini" id="btnQuery">查询</button> 
+        </div> 
+        <div id="dayhomework"></div> 
+        <div id="homework"></div> 
+        <div id="comment"></div> 
+
+        <!-- 多学科自定义编辑区域（美化后） -->
+        <div class="edit-panel" id="customPanel">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top:0;">
+                <legend>作业自定义</legend>
+            </fieldset>
+            
+            <!-- 基础信息编辑 -->
+            <div class="edit-item">
+                <label>学校名称：</label>
+                <input type="text" id="edit_school" value="荣成市蜊江中学">
+            </div>
+            <div class="edit-item">
+                <label>日期：</label>
+                <input type="text" id="edit_date" value="2025-11-07">
+            </div>
+            <div class="edit-item">
+                <label>年级：</label>
+                <input type="text" id="edit_grade" value="初三">
+            </div>
+            <div style="text-align:center; margin:10px 0 20px;">
+                <button class="layui-btn" id="addSubjectBtn" onclick="addSubjectModule()">+ 添加学科</button>
+            </div>
+
+            <!-- 学科1：数学（默认） -->
+            <div class="subject-edit-module" data-subject="1">
+                <div class="subject-edit-title">学科1：数学</div>
+                <div class="edit-item">
+                    <label>学科名称：</label>
+                    <input type="text" class="edit_subject_name" value="数学">
+                </div>
+                <div class="edit-item">
+                    <label>A组作业标题：</label>
+                    <input type="text" class="edit_a_title" value="A组作业(预计用时50分钟)">
+                </div>
+                <div class="edit-item">
+                    <label>A组作业内容：</label>
+                    <textarea class="edit_a_content">期中模拟（二）1-24</textarea>
+                </div>
+                <div class="edit-item">
+                    <label>B组作业标题：</label>
+                    <input type="text" class="edit_b_title" value="B组作业(预计用时50分钟)">
+                </div>
+                <div class="edit-item">
+                    <label>B组作业内容：</label>
+                    <textarea class="edit_b_content">期中模拟（二）1-23，梳理分式应用题类型</textarea>
+                </div>
+                <div class="edit-item">
+                    <label>C组作业标题：</label>
+                    <input type="text" class="edit_c_title" value="C组作业(预计用时50分钟)">
+                </div>
+                <div class="edit-item">
+                    <label>C组作业内容：</label>
+                    <textarea class="edit_c_content">期中模拟（二）1-23，在错题本上整理2道题</textarea>
+                </div>
+                <div class="edit-item">
+                    <label>备注：</label>
+                    <input type="text" class="edit_remark" value="">
+                </div>
+                <div class="edit-item">
+                    <label>教师：</label>
+                    <input type="text" class="edit_teacher" value="LENGYIN">
+                </div>
+                <div class="btn-group">
+                    <button class="layui-btn layui-btn-danger" onclick="removeSubjectModule(this)">删除学科</button>
+                </div>
+            </div>
+
+            <!-- 生成作业按钮 -->
+            <div style="text-align:center; margin-top:15px;">
+                <button class="layui-btn" onclick="generateMultiSubjectHomework()">生成作业</button>
+            </div>
         </div>
     </div>
-
-    <div class="layui-main">
-        <fieldset class="layui-elem-field layui-field-title">
-            <legend><div id="SchoolName">学校名称</div></legend>
-        </fieldset>
-        <div style="width:80%; padding:5px;">
-            <input id="startDate" class="laydate-icon"><button class="layui-btn layui-btn-mini" id="btnQuery">查询</button>
-        </div>
-        <div id="dayhomework"></div>
-        <div id="homework"></div>
-        <div id="comment"></div>
+    <div class="layui-footer footer footer-index"> 
+        <div class="layui-main"> 
+            <p id="SchoolName2">荣成市蜊江中学</p> 
+        </div> 
     </div>
-
-    <div class="layui-footer footer footer-index">
-        <div class="layui-main">
-            <p id="SchoolName2"></p>
-        </div>
-    </div>
-
-    <div class="site-tree-mobile layui-hide">
-        <<i class="layui-icon">&#xe602;</</i>
-    </div>
+    <div class="site-tree-mobile layui-hide"> <<<<<<<<<<<<<<i class="layui-icon">&#xe602;</</</</</</</</</</</</</i> </div> 
     <div class="site-mobile-shade"></div>
+    <script> 
+        laydate({ 
+            elem: '#startDate' 
+        }); 
+        laydate.skin("dahong"); 
 
-    <script>
-        laydate({
-            elem: '#startDate'
-        });
-        laydate.skin("dahong");
-    </script>
+        // 学科模块计数器
+        let subjectModuleCount = 1;
 
-    <script>
-        $("#btnQuery").on("click", function () {
-            QueryDGSInfo();
-        });
+        // 添加学科编辑模块
+        function addSubjectModule() {
+            subjectModuleCount++;
+            const defaultSubjects = ["物理", "语文", "英语", "化学"];
+            const defaultSubject = defaultSubjects[subjectModuleCount - 2] || `学科${subjectModuleCount}`;
+            const defaultTeacher = ["WULI", "YUWEN", "YINGYU", "HUAXUE"][subjectModuleCount - 2] || `TEACHER${subjectModuleCount}`;
+            
+            const moduleHtml = `
+                <div class="subject-edit-module" data-subject="${subjectModuleCount}">
+                    <div class="subject-edit-title">学科${subjectModuleCount}：${defaultSubject}</div>
+                    <div class="edit-item">
+                        <label>学科名称：</label>
+                        <input type="text" class="edit_subject_name" value="${defaultSubject}">
+                    </div>
+                    <div class="edit-item">
+                        <label>A组作业标题：</label>
+                        <input type="text" class="edit_a_title" value="A组作业(预计用时30分钟)">
+                    </div>
+                    <div class="edit-item">
+                        <label>A组作业内容：</label>
+                        <textarea class="edit_a_content">完成对应章节练习题</textarea>
+                    </div>
+                    <div class="edit-item">
+                        <label>B组作业标题：</label>
+                        <input type="text" class="edit_b_title" value="B组作业(预计用时30分钟)">
+                    </div>
+                    <div class="edit-item">
+                        <label>B组作业内容：</label>
+                        <textarea class="edit_b_content">完成对应章节练习题+整理知识点</textarea>
+                    </div>
+                    <div class="edit-item">
+                        <label>C组作业标题：</label>
+                        <input type="text" class="edit_c_title" value="C组作业(预计用时30分钟)">
+                    </div>
+                    <div class="edit-item">
+                        <label>C组作业内容：</label>
+                        <textarea class="edit_c_content">完成对应章节练习题+整理知识点+错题复盘</textarea>
+                    </div>
+                    <div class="edit-item">
+                        <label>备注：</label>
+                        <input type="text" class="edit_remark" value="">
+                    </div>
+                    <div class="edit-item">
+                        <label>教师：</label>
+                        <input type="text" class="edit_teacher" value="${defaultTeacher}">
+                    </div>
+                    <div class="btn-group">
+                        <button class="layui-btn layui-btn-danger" onclick="removeSubjectModule(this)">删除学科</button>
+                    </div>
+                </div>
+            `;
+            $("#addSubjectBtn").parent().after(moduleHtml);
+            
+            // 为新模块添加动画延迟
+            const modules = document.querySelectorAll(".subject-edit-module");
+            modules[modules.length - 1].style.animationDelay = `${0.3 * modules.length}s`;
+        }
 
-        $("#grade1").on("click", function () {
-            location.href = "http://a.rcjy.com.cn:8000/zuoye/ChuZhong1.html?schoolid=" + GetQueryString("schoolid");
-        });
-
-        $("#grade2").on("click", function () {
-            location.href = "http://a.rcjy.com.cn:8000/zuoye/ChuZhong2.html?schoolid=" + GetQueryString("schoolid");
-        });
-
-        $("#grade3").on("click", function () {
-            location.href = "http://a.rcjy.com.cn:8000/zuoye/ChuZhong3.html?schoolid=" + GetQueryString("schoolid");
-        });
-
-        $("#grade4").on("click", function () {
-            location.href = "http://a.rcjy.com.cn:8000/zuoye/ChuZhong4.html?schoolid=" + GetQueryString("schoolid");
-        });
-
-        $("#logolink").on("click", function () {
-            location.href = "http://a.rcjy.com.cn:8000/zuoye/BSZuoyeList.aspx?schoolid=" + GetQueryString("schoolid");
-        });
-
-        $(function () {
-            InitializeSchoolData();
-            InitializeDGSInfo();
-        });
-
-        function InitializeSchoolData() {
-            var schoolid = GetQueryString("schoolid");
-            $.ajax("http://a.rcjy.com.cn:8000/AjaxServices/ZuoyeHandle.ashx", {
-                data: {
-                    schoolid: escape(schoolid),
-                    method: "GetSchoolName"
-                },
-                dataType: 'json',
-                type: 'post',
-                timeout: 8000,
-                success: function (data) {
-                    $("#SchoolName").html(data.SchoolName);
-                    $("#SchoolName2").html("" + data.SchoolName);
-                },
-                error: function() {
-                    alert("学校信息加载失败，请检查网络或稍后重试");
-                }
+        // 删除学科编辑模块
+        function removeSubjectModule(btn) {
+            const modules = document.querySelectorAll(".subject-edit-module");
+            if (modules.length <= 1) {
+                alert("至少保留一个学科模块");
+                // 添加震动反馈
+                const panel = document.getElementById("customPanel");
+                panel.classList.add("shake-animation");
+                setTimeout(() => panel.classList.remove("shake-animation"), 500);
+                return;
+            }
+            const module = btn.closest(".subject-edit-module");
+            module.remove();
+            
+            // 重新编号学科标题
+            document.querySelectorAll(".subject-edit-module").forEach((mod, index) => {
+                const titleElem = mod.querySelector(".subject-edit-title");
+                const subjectName = mod.querySelector(".edit_subject_name").value;
+                titleElem.textContent = `学科${index + 1}：${subjectName}`;
+                mod.setAttribute("data-subject", index + 1);
+                mod.style.animationDelay = `${0.3 * (index + 1)}s`;
             });
+            subjectModuleCount = modules.length - 1;
         }
 
-        // 补充缺失的工具函数（原代码未完整给出，避免报错）
-        function GetQueryString(name) {
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-            var r = window.location.search.substr(1).match(reg);
-            if (r != null) return unescape(r[2]);
-            return null;
+        // 生成多学科作业
+        function generateMultiSubjectHomework() {
+            const school = $("#edit_school").val();
+            const date = $("#edit_date").val();
+            const grade = $("#edit_grade").val();
+            let homeworkHtml = `
+                <div class="headtext">${date}${grade}日常作业</div>
+                <div class="headtext2">审批领导：年级主任</div>
+            `;
+
+            // 遍历所有学科模块
+            const subjectModules = document.querySelectorAll(".subject-edit-module");
+            subjectModules.forEach(module => {
+                const subjectName = module.querySelector(".edit_subject_name").value;
+                const aTitle = module.querySelector(".edit_a_title").value;
+                const aContent = module.querySelector(".edit_a_content").value;
+                const bTitle = module.querySelector(".edit_b_title").value;
+                const bContent = module.querySelector(".edit_b_content").value;
+                const cTitle = module.querySelector(".edit_c_title").value;
+                const cContent = module.querySelector(".edit_c_content").value;
+                const remark = module.querySelector(".edit_remark").value;
+                const teacher = module.querySelector(".edit_teacher").value;
+
+                homeworkHtml += `
+                    <table>
+                        <tr class="subject-header">
+                            <td>
+                                <span class="subject-text">
+                                    <span>学科：</span>
+                                    <span class="subject-name">${subjectName}</span>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="group-title">${aTitle}</td>
+                        </tr>
+                        <tr>
+                            <td>${aContent}</td>
+                        </tr>
+                        <tr>
+                            <td class="group-title">${bTitle}</td>
+                        </tr>
+                        <tr>
+                            <td>${bContent}</td>
+                        </tr>
+                        <tr>
+                            <td class="group-title">${cTitle}</td>
+                        </tr>
+                        <tr>
+                            <td>${cContent}</td>
+                        </tr>
+                        <tr>
+                            <td class="group-title">备注:</td>
+                        </tr>
+                        <tr>
+                            <td>${remark || " "}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right; color:darkred; font-weight:bold;">责任教师:${teacher}</td>
+                        </tr>
+                    </table>
+                `;
+            });
+
+            // 更新页面内容
+            $("#SchoolName").text(school);
+            $("#SchoolName2").text(school);
+            $("#startDate").val(date);
+            $("#homework").html(homeworkHtml);
+
+            // 生成成功震动反馈
+            const panel = document.getElementById("customPanel");
+            panel.classList.add("shake-animation");
+            setTimeout(() => panel.classList.remove("shake-animation"), 500);
         }
 
-        // 占位函数（原代码未实现，避免点击查询报错）
-        function QueryDGSInfo() {
-            alert("作业查询功能需服务器后端支持，本地仅展示页面框架");
+        // 查询按钮同步调用
+        $("#btnQuery").on("click", function () { 
+            generateMultiSubjectHomework();
+        });
+
+        // 年级导航链接
+        $("#grade1").on("click", function () { 
+            location.href = "http://a.rcjy.com.cn:8000/zuoye/ChuZhong1.html?schoolid=" + GetQueryString("schoolid"); 
+        });
+        $("#grade2").on("click", function () { 
+            location.href = "http://a.rcjy.com.cn:8000/zuoye/ChuZhong2.html?schoolid=" + GetQueryString("schoolid"); 
+        });
+        $("#grade3").on("click", function () { 
+            location.href = "http://a.rcjy.com.cn:8000/zuoye/ChuZhong3.html?schoolid=" + GetQueryString("schoolid"); 
+        });
+        $("#grade4").on("click", function () { 
+            location.href = "http://a.rcjy.com.cn:8000/zuoye/ChuZhong4.html?schoolid=" + GetQueryString("schoolid"); 
+        });
+        $("#logolink").on("click", function () { 
+            location.href = "http://a.rcjy.com.cn:8000/zuoye/BSZuoyeList.aspx?schoolid=" + GetQueryString("schoolid"); 
+        });
+
+        // 页面初始化
+        $(function () { 
+            InitializeSchoolData(); 
+            InitializeDGSInfo(); 
+        });
+
+        function InitializeSchoolData() { 
+            var schoolid = GetQueryString("schoolid"); 
+            $.ajax("http://a.rcjy.com.cn:8000/AjaxServices/ZuoyeHandle.ashx", { 
+                data: { 
+                    schoolid: escape(schoolid), 
+                    method: "GetSchoolName" 
+                }, 
+                dataType: 'json', 
+                type: 'post', 
+                timeout: 8000, 
+                success: function (data) { 
+                    $("#SchoolName").html(data.SchoolName); 
+                    $("#SchoolName2").html(data.SchoolName); 
+                    $("#edit_school").val(data.SchoolName);
+                }, 
+                error: function() { 
+                    // 本地环境默认显示
+                } 
+            }); 
         }
-        function InitializeDGSInfo() {
-            $("#homework").html("<p style='text-align:center; padding:20px;'>请选择日期并点击查询按钮获取作业（本地环境暂不支持数据加载）</p>");
+
+        function GetQueryString(name) { 
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); 
+            var r = window.location.search.substr(1).match(reg); 
+            if (r != null) return unescape(r[2]); 
+            return null; 
+        }
+
+        function InitializeDGSInfo() { 
+            $("#homework").html("<p style='text-align:center; padding:20px;'>请填写学科作业内容并点击「生成作业」</p>"); 
         }
     </script>
 </body>
